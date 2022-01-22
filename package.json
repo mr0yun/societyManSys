@@ -1,0 +1,28 @@
+{
+  "name": "societymansys-b",
+  "version": "1.0.0",
+  "description": "College Society Management System -- BackEnd Part（学院社团管理系统——后端部分）",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mr0yun/societyManSys-B.git"
+  },
+  "author": "mr0yun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mr0yun/societyManSys-B/issues"
+  },
+  "homepage": "https://github.com/mr0yun/societyManSys-B#readme",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.1.1",
+    "koa2": "^2.0.0-alpha.7",
+    "koa2-cors": "^2.0.6",
+    "mysql": "^2.18.1"
+  }
+}
