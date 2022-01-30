@@ -1,5 +1,6 @@
 const mysql = require('mysql');
-const CODE = require('../utils/code');
+const {CODE} = require('../utils/constant');
+const Result = require('../model/Result');
 
 // 连接池
 let pool = mysql.createPool({
@@ -25,18 +26,9 @@ function query(sql){
   return new Promise((resolve, reject) => {
     baseQuery(sql, (err, data) => {
       if(err){
-        resolve({
-          message: '操作失败',
-          code: CODE.ERROR,
-          data: null
-        });
-        throw err;
+        resolve(new Result(`操作失败 : ${err.sqlMessage}`, CODE.ERROR, err));
       }
-      resolve({
-        message: '操作成功',
-        code: CODE.SUCCESS,
-        data: data
-      })
+      resolve(new Result('操作成功', CODE.SUCCESS, data));
     })
   })
 }

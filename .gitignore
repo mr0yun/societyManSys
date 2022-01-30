@@ -1,2 +1,3 @@
 # npm下载的包
 /node_modules/*
+/test/*
