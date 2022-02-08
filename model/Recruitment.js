@@ -1,14 +1,14 @@
 class Recruitment{
   constructor(id, sId, dId, recruitNum, requirement, startTime, endTime, state = 0, ratify = 0){
-    this._id = id;  // int
-    this._sId = sId;  // int
-    this._dId = dId;  // int
-    this._recruitNum = recruitNum;  // int
-    this._requirement = requirement;
-    this._startTime = startTime;  // datetime
-    this._endTime = endTime;  // datetime
-    this._state = state;  // tinyint
-    this._ratify = ratify;  // tinyint
+    this.id = id;  // int
+    this.s_id = sId;  // int
+    this.d_id = dId;  // int
+    this.recruit_num = recruitNum;  // int
+    this.requirement = requirement;
+    this.start_time = startTime;  // datetime
+    this.end_time = endTime;  // datetime
+    this.state = state;  // tinyint
+    this.ratify = ratify;  // tinyint
   }
 }
 

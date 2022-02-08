@@ -9,19 +9,19 @@ Content-Type: application/json
 
 {
   "data": {
-  "_id":1,
-  "_username":"aaa",
-  "_password":"123456","_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFhYSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNjQyMzAyNTM2LCJleHAiOjE2NDIzMDYxMzZ9._yN4tcinjswvFBbKLYNGM6VdrtBCYvHFIfobtdMD3yM",
-  "_power":0,
-  "_realname":"周易",
-  "_gender":0,
-  "_major":" 男",
-  "_grade":"软件工程",
-  "_class":"2018",
-  "_stuId":"14",
-  "_email":"",
-  "_phone":"",
-  "_avatarUrl":""
+  "id":2,
+  "user_name":"aaa",
+  "password":"123456","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFhYSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNjQyMzAyNTM2LCJleHAiOjE2NDIzMDYxMzZ9._yN4tcinjswvFBbKLYNGM6VdrtBCYvHFIfobtdMD3yM",
+  "power":0,
+  "real_name":"周壹",
+  "gender":"女",
+  "major":"软件工程",
+  "grade":"2018",
+  "class":"2",
+  "stu_id":"8003118329",
+  "email":"",
+  "phone":"",
+  "avatar_url":""
 }
 }
 
@@ -33,4 +33,161 @@ Content-Type: application/json
 {
   "username": "aaa",
   "password": "123456"
+}
+
+
+### 修改个人信息
+PATCH {{host}}/users
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFhYSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNjQzNTk2ODc0LCJleHAiOjE2NDM2MDA0NzR9.IKIk3-tLWn6Azc5en5wuFig0Yqa1FYb9OznOBCJ01jg
+
+{
+  "data": {
+  "id":2,
+  "user_name":"aaa",
+  "password":"123456","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFhYSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNjQyMzAyNTM2LCJleHAiOjE2NDIzMDYxMzZ9._yN4tcinjswvFBbKLYNGM6VdrtBCYvHFIfobtdMD3yM",
+  "power":0,
+  "real_name":"周壹",
+  "gender":"女",
+  "major":"软件工程",
+  "grade":"2018",
+  "class":"2",
+  "stu_id":"8003118329",
+  "email":"",
+  "phone":"",
+  "avatar_url":""
+}
+}
+
+
+### 修改密码
+PATCH {{host}}/users/psd
+Content-Type: application/json
+
+{
+  "username": "aaa",
+  "oldPassword": "12345",
+  "newPassword": "654321"
+}
+
+
+### 新建社团
+POST {{host}}/societies
+Content-Type: application/json
+
+{
+  "society": {
+    "id":0,
+    "name":"舞蹈社",
+    "u_id": 2,
+    "president":"盛贰",
+    "founder":"李弥",
+    "classification":"文艺爱好","founding_date":"2002-04-30",
+    "introduction":"本社团以弘扬民族书法艺术为宗旨，以提高社员的书写技能，促进校园文化建设为目标。了解书法基本知识，提高社员书法水平。养成良好写字习惯。培养学生爱好书法的兴趣，初步感受书法的艺术美。",
+    "ratify":0,
+    "recruit_eligible":0
+  },
+  "application": {
+    "id": 0, 
+    "type":1, 
+    "associated_id":0, 
+    "u_id":2, 
+    "title":"创立社团", 
+    "content":"", 
+    "img_urls":"", 
+    "file_urls":"", 
+    "state":0, 
+    "submit_time":"2022-02-05 12:00:00", 
+    "review_time": "", 
+    "review_opinion":""
+  }
+}
+
+
+### 修改社团信息
+PATCH {{host}}/societies
+Content-Type: application/json
+
+{
+  "data": {
+    "id":5,
+    "name":"舞蹈社",
+    "u_id": 2,
+    "president":"林散",
+    "founder":"李弥",
+    "classification":"文艺爱好","founding_date":"2002-04-30",
+    "introduction":"本社团以弘扬民族书法艺术为宗旨，以提高社员的书写技能，促进校园文化建设为目标。了解书法基本知识，提高社员书法水平。养成良好写字习惯。培养学生爱好书法的兴趣，初步感受书法的艺术美。",
+    "ratify":0,
+    "recruit_eligible":0
+  }
+}
+
+
+### 获取社团信息
+GET {{host}}/societies?id=2
+
+
+### 新建部门
+POST {{host}}/departments
+Content-Type: application/json
+
+{
+  "department": {"id":null,"name":"策划部","s_id":3,"founding_date":"2002-04-30", "minister": "陈菱袅", "introduction":"策划本社团的各种活动","member_num":0,"ratify":0},
+  "application": {
+    "id": null, "type":2, "associated_id":null, "u_id":2, "title":"创立部门", "content":"", "file_urls":"", "img_urls":"", "state":0, "submit_time":"2022-02-05 12:00:00", "review_time": "", "review_opinion":""
+  }
+}
+
+
+### 修改部门
+PATCH {{host}}/departments
+Content-Type: application/json
+
+{
+  "data": {"id":5,"name":"策划部","s_id":3,"founding_date":"2002-04-30", "minister": "陈菱袅", "introduction":"本部门负责策划本社团的各种活动","member_num":0,"ratify":0}
+}
+
+### 获取部门信息
+GET {{host}}/departments?id=3
+
+
+### 添加成员
+POST {{host}}/members
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 0,
+    "u_id": 2,
+    "s_id": 3,
+    "d_id": 5,
+    "position": "部长",
+    "join_time": "2004-10-01 00:00:00"
+  }
+}
+
+### 修改成员
+PATCH {{host}}/members
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 2,
+    "u_id": 2,
+    "s_id": 3,
+    "d_id": 5,
+    "position": "部委",
+    "join_time": "2004-10-01 00:00:00"
+  }
+}
+
+### 获取成员信息
+GET {{host}}/members?id=3
+
+### 删除成员
+DELETE {{host}}/members
+Content-Type: application/json
+
+{
+  "data": 2
 }

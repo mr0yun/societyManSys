@@ -1,12 +1,12 @@
 class FinancialInfo{
   constructor(id, sId, dId, handler, type, amount, recordTime){
-    this._id = id;  // int
-    this._sId = sId;  // int
-    this._dId = dId;  //  int
-    this._handler = handler;
-    this._type = type;  // tinyint
-    this._amount = amount; // decimal
-    this._recordTime = recordTime;  // datetime
+    this.id = id;  // int
+    this.s_id = sId;  // int
+    this.d_id = dId;  //  int
+    this.handler = handler;
+    this.type = type;  // tinyint
+    this.amount = amount; // decimal
+    this.record_time = recordTime;  // datetime
   }
 }
 

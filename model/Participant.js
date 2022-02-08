@@ -1,12 +1,12 @@
 class Participant{
   constructor(id, uId, aId, state = 0, comment = "", score = 0, lottery = 0){
-    this._id = id;
-    this._uId = uId;
-    this._aId = aId;
-    this._state = state;
-    this._comment = comment;
-    this._score = score;
-    this._lottery = lottery;
+    this.id = id;
+    this.u_id = uId;
+    this.a_id = aId;
+    this.state = state;
+    this.comment = comment;
+    this.score = score;
+    this.lottery = lottery;
   }
 }
 
