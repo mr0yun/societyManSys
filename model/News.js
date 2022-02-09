@@ -1,7 +1,7 @@
 class News{
-  constructor(id, pubId, sId, theme, content, pubTime){
+  constructor(id, contributor, sId, theme, content, pubTime){
     this.id = id;  // int
-    this.publisher_id = pubId;  // int
+    this.contributor = contributor;
     this.s_id = sId;  // int
     this.theme = theme;
     this.content = content;

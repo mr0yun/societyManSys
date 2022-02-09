@@ -10,6 +10,11 @@ const Department = require("../model/Department");
 const Application = require("../model/Application");
 const Member = require("../model/Member");
 const FinancialInfo = require("../model/FinancialInfo");
+const Activity = require('../model/Activity');
+const Recruitment = require('../model/Recruitment');
+const Candidate = require('../model/Candidate');
+const News = require('../model/News');
+const Participant = require('../model/Participant');
 
 const userHelper = {
   /**
@@ -187,6 +192,18 @@ const societyHelper = {
       return new Result('查询成功', res.code, JSON.stringify(res.data));
     }
     else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 修改社团的招新权限
+   * @param {number} id
+   * @param {number} power
+   * @returns {boolean}
+   */
+  async updateSocietyRecruit(id, power){
+    let updateSql = `update society set recruit_eligible = ${power} where id = ${id}`;
+    let res = await query(updateSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else return false;
   }
 }
 
@@ -310,7 +327,7 @@ const financialHelper = {
    * @param {FinancialInfo} fInfo
    * @returns {boolean}
    */
-   async addMember(fInfo){
+   async addFinancialInfo(fInfo){
     let insertSql = `insert into financialinfo values(null,${fInfo.s_id},${fInfo.d_id},'${fInfo.handler}',${fInfo.type},${fInfo.amount},'${fInfo.record_time}')`;
     let res = await query(insertSql);
     console.log(res);
@@ -326,8 +343,8 @@ const financialHelper = {
    * @param {number} id
    * @returns {boolean}
    */
-  async delMember(id){
-    let delSql = `delete from member where id=${id}`;
+  async delFinancialInfo(id){
+    let delSql = `delete from financialinfo where id=${id}`;
     let res = await query(delSql);
     if(res.code === CODE.SUCCESS) return true;
     else {
@@ -336,11 +353,11 @@ const financialHelper = {
     }
   },
   /** 修改财务信息
-   * @param {Member} fInfo
+   * @param {FinancialInfo} fInfo
    * @returns {boolean}
    */
-  async updateMember(fInfo){
-    let updateSql = `update member set d_id='${fInfo.d_id}', position='${fInfo.position}' where id=${fInfo.id}`;
+  async updateFinancialInfo(fInfo){
+    let updateSql = `update financialinfo set d_id='${fInfo.d_id}', handler='${fInfo.handler}', type=${fInfo.type}, amount=${fInfo.amount}, record_time='${fInfo.record_time}' where id=${fInfo.id}`;
     let res = await query(updateSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
@@ -350,9 +367,21 @@ const financialHelper = {
    * @param {number} id
    * @returns {Result}
    */
-  async getMembers(id){
-    let querySql = `select m.*, d.name, u.real_name, u.gender, u.major, u.grade, u.class, u.stu_id from (select * from member where s_id = ${id}) m join department d on m.d_id = d.id join user u on m.u_id = u.id
-    `;
+  async getFinancialInfos(id){
+    let querySql = `select f.*, d.name from (select * from financialinfo where s_id = ${id}) f join department d on m.d_id = d.id`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 按年获取财务信息
+   * @param {number} id
+   * @param {string} year
+   * @returns {Result}
+   */
+   async getFinancialInfosByYear(id, year){
+    let querySql = `select f.*, d.name from (select * from financialinfo where s_id = ${id} and record_time like '${year}%') f join department d on m.d_id = d.id`;
     let res = await query(querySql);
     if(res.code === CODE.SUCCESS){
       return new Result('查询成功', res.code, JSON.stringify(res.data));
@@ -360,6 +389,382 @@ const financialHelper = {
     else return new Result('查询失败' + res.message, CODE.ERROR, null);
   }
 }
+
+const activityHelper = {
+  /** 新建活动
+   * @param {Activity} aInfo
+   * @returns {boolean}
+   */
+   async addActivity(aInfo){
+    let insertSql = `insert into activity values(null,'${aInfo.name}',${aInfo.s_id},'${aInfo.content}','${aInfo.place}','${aInfo.start_time}','${aInfo.end_time}',${aInfo.state},${aInfo.ratify})`;
+    let res = await query(insertSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS){
+      return true;
+    }
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 删除活动
+   * @param {number} id
+   * @returns {boolean}
+   */
+  async delActivity(id){
+    let delSql = `delete from activity where id=${id}`;
+    let res = await query(delSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 修改活动信息
+   * @param {Activity} aInfo
+   * @returns {boolean}
+   */
+  async updateActivity(aInfo){
+    let updateSql = `update activity set name='${aInfo.name}', content='${aInfo.content}', place=${aInfo.place}, start_time='${aInfo.start_time}', end_time='${aInfo.end_time}' where id=${aInfo.id}`;
+    let res = await query(updateSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else return false;
+  },
+  /** 获取某社团活动信息
+   * @param {number} id
+   * @returns {Result}
+   */
+  async getActivities(id){
+    let querySql = `select * from activity where s_id = ${id}`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 获取所有活动信息
+   * @returns {Result}
+   */
+   async getAllActivities(){
+    let querySql = `select * from activity where state != 3`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 修改活动状态
+   * @param {number} id
+   * @param {number} state
+   * @returns {boolean}
+   */
+   async updateActivityState(id, state){
+    let updateSql = `update activity set state=${state} where id=${id}`;
+    let res = await query(updateSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  }
+}
+
+const recruitmentHelper = {
+  /** 新建招募信息
+   * @param {Recruitment} rInfo
+   * @returns {boolean}
+   */
+   async addRecruitment(rInfo){
+    let insertSql = `insert into recruitment values(null,${rInfo.s_id},${rInfo.d_id},${rInfo.recruit_num},'${rInfo.requirement}','${rInfo.start_time}','${rInfo.end_time}',${rInfo.state},${rInfo.ratify})`;
+    let res = await query(insertSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 删除招募信息
+   * @param {number} id
+   * @returns {boolean}
+   */
+  async delRecruitment(id){
+    let delSql = `delete from recruitment where id=${id}`;
+    let res = await query(delSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 修改招募信息
+   * @param {Recruitment} rInfo
+   * @returns {boolean}
+   */
+  async updateRecruitment(rInfo){
+    let updateSql = `update recruitment set d_id=${rInfo.d_id}, recruit_num=${rInfo.recruit_num}, requirement='${rInfo.requirement}', start_time='${rInfo.start_time}', end_time='${rInfo.end_time}', state=${rInfo.state} where id=${rInfo.id}`;
+    let res = await query(updateSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else return false;
+  },
+  /** 查询某社团招募信息
+   * @param {number} id
+   * @returns {Result}
+   */
+  async getRecruitments(id){
+    let querySql = `select * from recruitment where s_id=${id}`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 查询所有招募信息
+   * @returns {Result}
+   */
+   async getAllRecruitments(){
+    let querySql = `select * from recruitment where state = 1`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  }
+}
+
+const candidateHelper = {
+  /** 新建候选人信息
+   * @param {Candidate} cInfo
+   * @returns {boolean}
+   */
+   async addCandidate(cInfo){
+    let insertSql = `insert into candidate values(null,${cInfo.u_id},${cInfo.r_id},${cInfo.state},${cInfo.test_score},'${cInfo.interview_evaluation}',${cInfo.interview_score}`;
+    let res = await query(insertSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 删除候选人信息
+   * @param {number} id
+   * @returns {boolean}
+   */
+  async delCandidate(id){
+    let delSql = `delete from candidate where id=${id}`;
+    let res = await query(delSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 修改候选人信息
+   * @param {Candidate} cInfo
+   * @returns {boolean}
+   */
+  async updateCandidate(cInfo){
+    let updateSql = `update candidate set state=${cInfo.state}, test_score=${cInfo.test_score}, interview_evaluation='${cInfo.interview_evaluation}', interview_score=${cInfo.interview_score} where id=${cInfo.id}`;
+    let res = await query(updateSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else return false;
+  },
+  /** 修改候选人面试信息
+   * @param {numbe} id
+   * @param {number} score
+   * @param {string} evaluation
+   * @returns {boolean}
+   */
+   async updateInterview(id, score, evaluation){
+    let updateSql = `update candidate set  interview_evaluation='${evaluation}', interview_score=${score} where id=${id}`;
+    let res = await query(updateSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else return false;
+  },
+  /** 修改候选人状态
+   * @param {number} id
+   * @param {number} state
+   * @returns {boolean}
+   */
+   async updateCandidate(id, state){
+    let updateSql = `update candidate set state=${state} where id=${id}`;
+    let res = await query(updateSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else return false;
+  },
+  /** 查询候选人信息
+   * @param {number} id
+   * @returns {Result}
+   */
+  async getCandidates(id){
+    let querySql = `select c.*, u.real_name, u.gender, u.mmajor, u.grade, u.class, u.stu_id (select * from candidate where s_id=${id}) c join user on c.u_id = user.id`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  }
+}
+
+const newsHelper = {
+  /** 新建新闻
+   * @param {News} nInfo
+   * @returns {boolean}
+   */
+   async addNews(nInfo){
+    let insertSql = `insert into news values(null,'${nInfo.contributor}',${nInfo.s_id},'${nInfo.theme}','${nInfo.content}','${nInfo.published_time}')`;
+    let res = await query(insertSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 删除新闻
+   * @param {number} id
+   * @returns {boolean}
+   */
+  async delNews(id){
+    let delSql = `delete from news where id=${id}`;
+    let res = await query(delSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 修改新闻
+   * @param {News} nInfo
+   * @returns {boolean}
+   */
+  async updateNews(nInfo){
+    let updateSql = `update news set contributor='${nInfo.contributor}', theme='${nInfo.theme}', content='${nInfo.content}', published_time='${nInfo.published_time}' where id=${nInfo.id}`;
+    let res = await query(updateSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS) return true;
+    else return false;
+  },
+  /** 查询某社团新闻
+   * @param {number} id
+   * @returns {Result}
+   */
+  async getNews(id){
+    let querySql = `select * from news where s_id=${id}`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 查询所有新闻
+   * @returns {Result}
+   */
+   async getAllNews(){
+    let querySql = `select * from news`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  }
+}
+
+const participantHelper = {
+  /** 参加活动
+   * @param {Participant} pInfo
+   * @returns {boolean}
+   */
+   async addParticipant(pInfo){
+    let insertSql = `insert into participant values(null,${pInfo.u_id},${pInfo.a_id},${pInfo.state},'${pInfo.comment}',${pInfo.score},${pInfo.lottery})`;
+    let res = await query(insertSql);
+    console.log(res);
+    if (res.code === CODE.SUCCESS){
+      return true;
+    }
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 退出活动
+   * @param {number} id
+   * @returns {boolean}
+   */
+  async delParticipant(id){
+    let delSql = `delete from participant where id=${id}`;
+    let res = await query(delSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 评论活动
+   * @param {number} aId
+   * @param {number} uId
+   * @param {number} score
+   * @param {string} comment
+   * @returns {boolean}
+   */
+   async updateParticipant(aId, uId, score, comment){
+    let updateSql = `update participant set score=${score}, comment='${comment}' where a_id=${aId} and u_id=${uId}`;
+    let res = await query(updateSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 修改活动状态
+   * @param {number} aId
+   * @param {number} uId
+   * @param {number} state
+   */
+   async updateParticipantState(aId, uId, state){
+    let updateSql = `update participant set state=${state} where a_id=${aId} and u_id=${uId}`;
+    let res = await query(updateSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 查询某活动参加者
+   * @param {number} id
+   * @returns {Result}
+   */
+   async getParticipants(id){
+    let querySql = `select * from participant where a_id=${id}`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 修改活动中奖信息
+   * @param {number} aId
+   * @param {number} uId
+   * @param {number} lottery
+   */
+   async updatelottery(aId, uId, lottery){
+    let updateSql = `update participant set lottery=${lottery} where a_id=${aId} and u_id=${uId}`;
+    let res = await query(updateSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  }
+
+}
+
 
 const applicationHelper = {
   /** 添加一条申请
@@ -371,6 +776,58 @@ const applicationHelper = {
     let res = await query(insertSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 删除申请
+   * @param {number} id
+   * @returns {boolean}
+   */
+   async delApplication(id){
+    let delSql = `delete from application where id=${id}`;
+    let res = await query(delSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
+  },
+  /** 获取某申请详细信息
+   * @param {number} id
+   * @returns {Result}
+   */
+  async getApplications(id){
+    let querySql = `select * from application where id = ${id}`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 获取所有申请信息
+   * @returns {Result}
+   */
+   async getAllApplications(){
+    let querySql = `select * from application`;
+    let res = await query(querySql);
+    if(res.code === CODE.SUCCESS){
+      return new Result('查询成功', res.code, JSON.stringify(res.data));
+    }
+    else return new Result('查询失败' + res.message, CODE.ERROR, null);
+  },
+  /** 审批申请
+   * @param {number} id
+   * @param {number} state
+   * @param {string} time
+   * @param {string} opinion
+   * @returns {boolean}
+   */
+   async reviewApplication(id, state, time, opinion){
+    let updateSql = `update application set state=${state}, review_time='${time}', review_opinion='${opinion}' where id=${id}`;
+    let res = await query(updateSql);
+    if(res.code === CODE.SUCCESS) return true;
     else {
       console.error(res.message);
       return false;
