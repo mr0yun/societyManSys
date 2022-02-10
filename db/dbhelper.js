@@ -328,7 +328,7 @@ const financialHelper = {
    * @returns {boolean}
    */
    async addFinancialInfo(fInfo){
-    let insertSql = `insert into financialinfo values(null,${fInfo.s_id},${fInfo.d_id},'${fInfo.handler}',${fInfo.type},${fInfo.amount},'${fInfo.record_time}')`;
+    let insertSql = `insert into financialinfo values(null,${fInfo.s_id},${fInfo.d_id},'${fInfo.handler}',${fInfo.type},${fInfo.amount},'${fInfo.record_time}','${fInfo.remark}')`;
     let res = await query(insertSql);
     console.log(res);
     if (res.code === CODE.SUCCESS){
@@ -357,7 +357,7 @@ const financialHelper = {
    * @returns {boolean}
    */
   async updateFinancialInfo(fInfo){
-    let updateSql = `update financialinfo set d_id='${fInfo.d_id}', handler='${fInfo.handler}', type=${fInfo.type}, amount=${fInfo.amount}, record_time='${fInfo.record_time}' where id=${fInfo.id}`;
+    let updateSql = `update financialinfo set d_id='${fInfo.d_id}', handler='${fInfo.handler}', type=${fInfo.type}, amount=${fInfo.amount}, record_time='${fInfo.record_time}', remark='${fInfo.remark}' where id=${fInfo.id}`;
     let res = await query(updateSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
@@ -368,7 +368,7 @@ const financialHelper = {
    * @returns {Result}
    */
   async getFinancialInfos(id){
-    let querySql = `select f.*, d.name from (select * from financialinfo where s_id = ${id}) f join department d on m.d_id = d.id`;
+    let querySql = `select f.*, d.name from (select * from financialinfo where s_id = ${id}) f join department d on f.d_id = d.id`;
     let res = await query(querySql);
     if(res.code === CODE.SUCCESS){
       return new Result('查询成功', res.code, JSON.stringify(res.data));
@@ -381,7 +381,7 @@ const financialHelper = {
    * @returns {Result}
    */
    async getFinancialInfosByYear(id, year){
-    let querySql = `select f.*, d.name from (select * from financialinfo where s_id = ${id} and record_time like '${year}%') f join department d on m.d_id = d.id`;
+    let querySql = `select f.*, d.name from (select * from financialinfo where s_id = ${id} and record_time like '${year}%') f join department d on f.d_id = d.id`;
     let res = await query(querySql);
     if(res.code === CODE.SUCCESS){
       return new Result('查询成功', res.code, JSON.stringify(res.data));
@@ -425,7 +425,7 @@ const activityHelper = {
    * @returns {boolean}
    */
   async updateActivity(aInfo){
-    let updateSql = `update activity set name='${aInfo.name}', content='${aInfo.content}', place=${aInfo.place}, start_time='${aInfo.start_time}', end_time='${aInfo.end_time}' where id=${aInfo.id}`;
+    let updateSql = `update activity set name='${aInfo.name}', content='${aInfo.content}', place='${aInfo.place}', start_time='${aInfo.start_time}', end_time='${aInfo.end_time}' where id=${aInfo.id}`;
     let res = await query(updateSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
@@ -540,7 +540,7 @@ const candidateHelper = {
    * @returns {boolean}
    */
    async addCandidate(cInfo){
-    let insertSql = `insert into candidate values(null,${cInfo.u_id},${cInfo.r_id},${cInfo.state},${cInfo.test_score},'${cInfo.interview_evaluation}',${cInfo.interview_score}`;
+    let insertSql = `insert into candidate values(null,${cInfo.u_id},${cInfo.r_id},${cInfo.state},${cInfo.test_score},'${cInfo.interview_evaluation}',${cInfo.interview_score})`;
     let res = await query(insertSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
@@ -574,13 +574,15 @@ const candidateHelper = {
     else return false;
   },
   /** 修改候选人面试信息
-   * @param {numbe} id
+   * @param {number} id
    * @param {number} score
    * @param {string} evaluation
+   * @param {boolean} pass
    * @returns {boolean}
    */
-   async updateInterview(id, score, evaluation){
-    let updateSql = `update candidate set  interview_evaluation='${evaluation}', interview_score=${score} where id=${id}`;
+  async updateInterview(id, score, evaluation){
+    let state = pass ? 3 : 5; 
+    let updateSql = `update candidate set state=${state}, interview_evaluation='${evaluation}', interview_score=${score} where id=${id}`;
     let res = await query(updateSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
@@ -591,7 +593,7 @@ const candidateHelper = {
    * @param {number} state
    * @returns {boolean}
    */
-   async updateCandidate(id, state){
+   async updateCandidateState(id, state){
     let updateSql = `update candidate set state=${state} where id=${id}`;
     let res = await query(updateSql);
     console.log(res);
@@ -603,7 +605,7 @@ const candidateHelper = {
    * @returns {Result}
    */
   async getCandidates(id){
-    let querySql = `select c.*, u.real_name, u.gender, u.mmajor, u.grade, u.class, u.stu_id (select * from candidate where s_id=${id}) c join user on c.u_id = user.id`;
+    let querySql = `select c.*, u.real_name, u.gender, u.major, u.grade, u.class, u.stu_id from (select * from candidate where r_id=${id}) c join user u on c.u_id = u.id`;
     let res = await query(querySql);
     if(res.code === CODE.SUCCESS){
       return new Result('查询成功', res.code, JSON.stringify(res.data));
@@ -618,7 +620,7 @@ const newsHelper = {
    * @returns {boolean}
    */
    async addNews(nInfo){
-    let insertSql = `insert into news values(null,'${nInfo.contributor}',${nInfo.s_id},'${nInfo.theme}','${nInfo.content}','${nInfo.published_time}')`;
+    let insertSql = `insert into news values(null,'${nInfo.contributor}',${nInfo.s_id},'${nInfo.theme}','${nInfo.outline}','${nInfo.content}','${nInfo.published_time}')`;
     let res = await query(insertSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
@@ -645,7 +647,7 @@ const newsHelper = {
    * @returns {boolean}
    */
   async updateNews(nInfo){
-    let updateSql = `update news set contributor='${nInfo.contributor}', theme='${nInfo.theme}', content='${nInfo.content}', published_time='${nInfo.published_time}' where id=${nInfo.id}`;
+    let updateSql = `update news set contributor='${nInfo.contributor}', theme='${nInfo.theme}', outline='${nInfo.outline}', content='${nInfo.content}', published_time='${nInfo.published_time}' where id=${nInfo.id}`;
     let res = await query(updateSql);
     console.log(res);
     if (res.code === CODE.SUCCESS) return true;
@@ -714,7 +716,7 @@ const participantHelper = {
    * @returns {boolean}
    */
    async updateParticipant(aId, uId, score, comment){
-    let updateSql = `update participant set score=${score}, comment='${comment}' where a_id=${aId} and u_id=${uId}`;
+    let updateSql = `update participant set state=2, score=${score}, comment='${comment}' where a_id=${aId} and u_id=${uId}`;
     let res = await query(updateSql);
     if(res.code === CODE.SUCCESS) return true;
     else {
@@ -832,9 +834,24 @@ const applicationHelper = {
       console.error(res.message);
       return false;
     }
+  },
+  /** 修改许可
+   * @param {string} table
+   * @param {number} id
+   * @param {number} ratify
+   * @returns {boolean}
+   */
+   async updateRatify(table, id, ratify){
+    let updateSql = `update ${table} set ratify=${ratify} where id=${id}`;
+    let res = await query(updateSql);
+    if(res.code === CODE.SUCCESS) return true;
+    else {
+      console.error(res.message);
+      return false;
+    }
   }
 }
 
 
 
-module.exports = {userHelper, societyHelper, departmentHelper, applicationHelper, memberHelper}
+module.exports = {userHelper, societyHelper, departmentHelper, applicationHelper, memberHelper, financialHelper, activityHelper, recruitmentHelper, candidateHelper, newsHelper, participantHelper}

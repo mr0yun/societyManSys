@@ -132,9 +132,9 @@ POST {{host}}/departments
 Content-Type: application/json
 
 {
-  "department": {"id":null,"name":"策划部","s_id":3,"founding_date":"2002-04-30", "minister": "陈菱袅", "introduction":"策划本社团的各种活动","member_num":0,"ratify":0},
+  "department": {"id":null,"name":"技术部","s_id":6,"founding_date":"2022-02-10", "minister": "陈零了", "introduction":"本部门由水平较高的棋手组成，负责研究学习围棋、精进棋艺，给其他部门授艺，以及对外赛事主力。","member_num":0,"ratify":0},
   "application": {
-    "id": null, "type":2, "associated_id":null, "u_id":2, "title":"创立部门", "content":"", "file_urls":"", "img_urls":"", "state":0, "submit_time":"2022-02-05 12:00:00", "review_time": "", "review_opinion":""
+    "id": null, "type":2, "associated_id":null, "u_id":2, "title":"创立部门", "content":"", "file_urls":"", "img_urls":"", "state":0, "submit_time":"2022-02-10 10:28:00", "review_time": "", "review_opinion":""
   }
 }
 
