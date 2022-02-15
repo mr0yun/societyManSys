@@ -192,7 +192,18 @@ const societyHelper = {
     }
     else return new Result('查询失败' + res.message, CODE.ERROR, null);
   },
-  /** 查询社团信息
+  /** 查询所有社团信息
+  * @returns {Result}
+  */
+ async getAllSocieties(){
+   let querySql = `select * from society`;
+   let res = await query(querySql);
+   if(res.code === CODE.SUCCESS){
+     return new Result('查询成功', res.code, JSON.stringify(res.data));
+   }
+   else return new Result('查询失败' + res.message, CODE.ERROR, null);
+ },
+  /** 查询社团招新信息
    * @param {number} recruit
    * @returns {Result}
    */

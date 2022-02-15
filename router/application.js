@@ -62,7 +62,7 @@ applications.patch('/', async ctx => {
         
         break;
       case 6: // 评优
-       
+        
         break;
       case 7:
         result = await societyHelper.delSociety(asId);
@@ -94,6 +94,16 @@ applications.patch('/recruit', async ctx => {
     else ctx.body = new Response('结束失败，请再次尝试', CODE.ERROR, false);
   }
   else ctx.body = new Response('获取社团信息失败', CODE.ERROR, false);
+})
+
+// 删除申请
+applications.delete('/', async ctx => {
+  let aId = ctx.request.body.data;
+  let res = await applicationHelper.delApplication(aId);
+  if(res){
+    ctx.body = new Response('删除成功', CODE.SUCCESS, false);
+  }
+  else ctx.body = new Response('删除失败', CODE.ERROR, false);
 })
 
 module.exports = applications

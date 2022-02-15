@@ -122,6 +122,24 @@ Content-Type: application/json
   }
 }
 
+### 修改社团招新权限
+PATCH {{host}}/societies/recruit
+Content-Type: application/json
+
+{
+  "societyId": 7,
+  "recruit": 1
+}
+
+
+
+### 删除社团
+DELETE {{host}}/societies
+Content-Type: application/json
+
+{
+  "data": 7
+}
 
 ### 获取社团信息
 GET {{host}}/societies?id=2
@@ -505,3 +523,12 @@ Content-Type: application/json
 
 ### 结束招新
 PATCH {{host}}/applications/recruit
+
+
+### 删除申请
+DELETE {{host}}/applications
+Content-Type: application/json
+
+{
+  "data": 13
+}

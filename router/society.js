@@ -44,6 +44,15 @@ societies.patch('/', async ctx => {
   else ctx.body = new Response('更新失败', CODE.ERROR, false);
 })
 
+// 修改社团招新权限
+societies.patch('/recruit', async ctx => {
+  let sId = ctx.request.body.societyId;
+  let recruit = ctx.request.body.recruit;
+  let res = await societyHelper.updateSocietyRecruit(sId, recruit);
+  if(res) ctx.body = new Response('更新成功', CODE.SUCCESS, false);
+  else ctx.body = new Response('更新失败', CODE.ERROR, false);
+})
+
 // 获取社团信息
 societies.get('/', async ctx => {
   let uId = ctx.query.id;
@@ -53,6 +62,16 @@ societies.get('/', async ctx => {
     ctx.body = new Response(res.message, CODE.SUCCESS, true, 'json', res.data);
   }
   else ctx.body = new Response(res.message, CODE.ERROR, false);
+})
+
+// 删除社团
+societies.delete('/', async ctx => {
+  let sId = ctx.request.body.data;
+  let res = await societyHelper.delSociety(sId);
+  if(res){
+    ctx.body = new Response('删除成功', CODE.SUCCESS, false);
+  }
+  else ctx.body = new Response('删除失败', CODE.ERROR, false);
 })
 
 module.exports = societies
