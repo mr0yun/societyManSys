@@ -5,14 +5,14 @@ const SECERT = 'societyManSys';
 
 /**
  * 生成token
+ * @param {number} id 用户id
  * @param {string} name 用户名
- * @param {string} psd 加密后的用户密码
  * @returns {string} 生成的token
  */
-function sign(name, psd){
+function sign(id, name){
   // 默认加密算法 (HMAC SHA256)
   // 有效时间设置为1h
-  return jwt.sign({username: name, password:psd}, SECERT, {expiresIn: 3600});  
+  return jwt.sign({userId: id, username: name}, SECERT, {expiresIn: 3600});  
 }
 
 /**

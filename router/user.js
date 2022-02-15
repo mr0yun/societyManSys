@@ -49,7 +49,7 @@ users.patch('/', async ctx => {
   // let userInfo = JSON.parse(ctx.request.body.data);
   console.log(userInfo);
 
-  let valid = await userHelper.tokenCheck(userInfo.id, token);
+  let valid = await userHelper.tokenCheck(token);
   if(valid){  
     // token校验通过
     let res = await userHelper.updateUser(userInfo);

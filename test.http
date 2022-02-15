@@ -32,14 +32,14 @@ Content-Type: application/json
 
 {
   "username": "aaa",
-  "password": "123456"
+  "password": "654321"
 }
 
 
 ### 修改个人信息
 PATCH {{host}}/users
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFhYSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNjQzNTk2ODc0LCJleHAiOjE2NDM2MDA0NzR9.IKIk3-tLWn6Azc5en5wuFig0Yqa1FYb9OznOBCJ01jg
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoiYWFhIiwiaWF0IjoxNjQ0OTI5Njc5LCJleHAiOjE2NDQ5MzMyNzl9.oZ8z4ptbJUWSBScv_iZMorYGqGN-NmN_zgjmuW1rzgI
 
 {
   "data": {
@@ -47,7 +47,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFhYSIsInBh
   "user_name":"aaa",
   "password":"123456","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFhYSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNjQyMzAyNTM2LCJleHAiOjE2NDIzMDYxMzZ9._yN4tcinjswvFBbKLYNGM6VdrtBCYvHFIfobtdMD3yM",
   "power":0,
-  "real_name":"周壹",
+  "real_name":"周壹玟",
   "gender":"女",
   "major":"软件工程",
   "grade":"2018",
@@ -247,6 +247,7 @@ Content-Type: application/json
 
 ### 获取财务信息
 GET {{host}}/financialinfos?id=3
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoiYWFhIiwiaWF0IjoxNjQ0OTI5Njc5LCJleHAiOjE2NDQ5MzMyNzl9.oZ8z4ptbJUWSBScv_iZMorYGqGN-NmN_zgjmuW1rzgI
 
 ### 按年获取财务信息
 GET {{host}}/financialinfos/export?id=3&year=2022

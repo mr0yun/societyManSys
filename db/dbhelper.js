@@ -57,7 +57,7 @@ const userHelper = {
     if (res.code === CODE.SUCCESS && res.data.length > 0) {
       if (update) {
         // 用户名和密码正确，重新生成token
-        let updateRes = await this.updateToken(username, psd);
+        let updateRes = await this.updateToken(res.data[0].id, username);
         if (updateRes.isUpdated) {
           // 更新token完成，重新查询user内容
           let newRes = await query(querySql);
@@ -76,12 +76,12 @@ const userHelper = {
 
   /**
    * 更新token，用于登录
+   * @param {number} id
    * @param {string} username
-   * @param {string} psd
    * @returns {object}
    */
-  async updateToken(username, psd) {
-    let token = jwt.sign(username, psd);
+  async updateToken(id, username) {
+    let token = jwt.sign(id, username);
     let updateSql = `update user set token='${token}' where user_name='${username}'`;
     let res = await query(updateSql);
     if (res.code === CODE.SUCCESS) {
@@ -91,21 +91,12 @@ const userHelper = {
 
   /**
    * 检查用户token
-   * @param {number} userId 用户id
    * @param {string} userToken 用户token
    * @returns {boolean} true没过期，false过期需重新登录
    */
-  async tokenCheck(userId, userToken) {
-    let querySql = `select token from user where id=${userId}`;
-    let res = await query(querySql);
-    if (
-      res.code === CODE.SUCCESS &&
-      res.data.length > 0 &&
-      res.data[0].token === userToken
-    ) {
-      let checkRes = await jwt.verify(res.data[0].token);
-      if (checkRes.code === CODE.SUCCESS) return true;
-    }
+  async tokenCheck(userToken) {
+    let checkRes = await jwt.verify(userToken);
+    if (checkRes.code === CODE.SUCCESS) return true;
     return false;
   },
 
