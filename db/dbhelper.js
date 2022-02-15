@@ -14,7 +14,6 @@ const Activity = require('../model/Activity');
 const Recruitment = require('../model/Recruitment');
 const Candidate = require('../model/Candidate');
 const News = require('../model/News');
-const Participant = require('../model/Participant');
 
 const userHelper = {
   /**
@@ -788,7 +787,7 @@ const participantHelper = {
     let querySql = `select p.id, p.u_id, u.user_name, u.real_name from (select id, u_id from participant where a_id=${id}) p join user u on u.id=p.u_id`;
     let res = await query(querySql);
     if(res.code === CODE.SUCCESS){
-      return new Result('查询成功', res.code, JSON.stringify(res.data));
+      return new Result('查询成功', res.code, res.data);
     }
     else return new Result('查询失败' + res.message, CODE.ERROR, null);
   },

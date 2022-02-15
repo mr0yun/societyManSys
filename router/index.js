@@ -19,13 +19,13 @@ router.use('/users', users.routes(), users.allowedMethods());
 router.use('/societies', societies.routes(), societies.allowedMethods());
 router.use('/departments', departments.routes(), departments.allowedMethods());
 router.use('/members', members.routes(), members.allowedMethods());
-
 router.use('/financialinfos', financialinfos.routes(), financialinfos.allowedMethods());
 router.use('/activities', activities.routes(), activities.allowedMethods());
 router.use('/participants', participants.routes(), participants.allowedMethods());
 router.use('/recruitments', recruitments.routes(), recruitments.allowedMethods());
 router.use('/candidates', candidates.routes(), candidates.allowedMethods());
 router.use('/news', news.routes(), news.allowedMethods());
+
 router.use('/applications', applications.routes(), applications.allowedMethods());
 
 module.exports = router;

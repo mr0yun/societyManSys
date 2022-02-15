@@ -191,3 +191,317 @@ Content-Type: application/json
 {
   "data": 2
 }
+
+
+### 添加财务信息
+POST {{host}}/financialinfos
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 0,
+    "s_id": 3,
+    "d_id": 5,
+    "handler": "王小盼",
+    "type": 0,
+    "amount": 121.8,
+    "record_time": "2022-02-13 12:15:00",
+    "remark": "买入两个沙包"
+  }
+}
+
+### 修改财务信息
+PATCH {{host}}/financialinfos
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 2,
+    "s_id": 3,
+    "d_id": 5,
+    "handler": "王小盼",
+    "type": 0,
+    "amount": 221.88,
+    "record_time": "2022-02-13 12:15:00",
+    "remark": "买入两个沙包"
+  }
+}
+
+### 获取财务信息
+GET {{host}}/financialinfos?id=3
+
+### 按年获取财务信息
+GET {{host}}/financialinfos/export?id=3&year=2022
+
+### 删除财务信息
+DELETE {{host}}/financialinfos
+Content-Type: application/json
+
+{
+  "data": 3
+}
+
+
+
+### 添加活动
+POST {{host}}/activities
+Content-Type: application/json
+
+{
+  "activity": {
+    "id": null,
+    "name": "晨练",
+    "s_id": 3,
+    "content": "为期一周的晨练活动，和武术社的小伙伴们一起强身健体吧！",
+    "place": "田径场",
+    "start_time": "2022-02-14 7:00:00",
+    "end_time": "2022-02-14 8:00:00",
+    "state": 0,
+    "ratify": 0
+  },
+  "application": {
+    "id": null, "type":3, "associated_id":null, "u_id":2, "title":"开展活动", "content":"开展晨练活动，为期一周", "file_urls":"", "img_urls":"", "state":0, "submit_time":"2022-02-13 14:39:00", "review_time": "", "review_opinion":""
+  }
+}
+
+### 修改活动信息
+PATCH {{host}}/activities
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 3,
+    "name": "晨练",
+    "s_id": 3,
+    "content": "为期一周的晨练活动，和武术社的小伙伴们一起强身健体吧！",
+    "place": "田径场",
+    "start_time": "2022-02-14 7:00:00",
+    "end_time": "2022-02-20 8:00:00",
+    "state": 0,
+    "ratify": 0
+  }
+}
+
+### 获取活动信息
+GET {{host}}/activities?id=0
+
+
+### 删除活动
+DELETE {{host}}/activities
+Content-Type: application/json
+
+{
+  "data": 2
+}
+
+
+### 参加活动
+POST {{host}}/participants
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "activityId": 3
+}
+
+### 签到
+PATCH {{host}}/participants/state
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "activityId": 3
+}
+
+### 发表活动评论
+PATCH {{host}}/participants/comments
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "activityId": 3,
+  "score": 5,
+  "comment": "坚持了一周时间，我感觉自己已经开始养成锻炼的习惯了。"
+}
+
+### 获取参与者信息
+GET {{host}}/participants?id=3
+
+### 抽奖
+PATCH {{host}}/participants/lottery
+Content-Type: application/json
+
+{
+  "activityId": 3,
+  "count": 1,
+  "level": 3
+}
+
+
+### 退出活动
+DELETE {{host}}/participants
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "activityId": 3
+}
+
+
+### 新建招募信息
+POST {{host}}/recruitments
+Content-Type: application/json
+
+{
+  "data": {
+    "id": null,
+    "s_id": 6,
+    "d_id": 6,
+    "recruit_num": 5,
+    "requirement": "围棋水平高",
+    "start_time": "2022-02-14 7:00:00",
+    "end_time": "2022-02-20 19:00:00",
+    "state": 0,
+    "ratify": 0
+  }
+}
+
+### 修改招募信息
+PATCH {{host}}/recruitments
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 2,
+    "s_id": 6,
+    "d_id": 6,
+    "recruit_num": 4,
+    "requirement": "围棋水平高",
+    "start_time": "2022-02-14 7:00:00",
+    "end_time": "2022-02-20 19:00:00",
+    "state": 0,
+    "ratify": 0
+  }
+}
+
+### 获取招募信息
+GET {{host}}/recruitments?id=3
+
+
+
+### 参加社团招新
+POST {{host}}/candidates
+Content-Type: application/json
+
+{
+  "data": {
+    "id": null,
+    "u_id": 2,
+    "r_id": 2,
+    "state": 0,
+    "test_score": 80,
+    "interview_evaluation": "",
+    "interview_score": 0
+  }
+}
+
+### 修改候选人信息
+PATCH {{host}}/candidates
+Content-Type: application/json
+
+{
+  "candidateId": 2,
+  "score": 60,
+  "evaluation": "思辨能力未达标",
+  "pass": false
+}
+
+### 修改候选人状态
+PATCH {{host}}/candidates/state
+Content-Type: application/json
+
+{
+  "candidateId": 2,
+  "state": 5
+}
+
+### 获取候选人信息
+GET {{host}}/candidates?id=2
+
+
+### 添加新闻
+POST {{host}}/news
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 0,
+    "contributor": "王小盼",
+    "s_id": 6,
+    "theme": "元宵比武",
+    "outline": "元宵节武术社举办一起团团圆圆，煮汤圆，看表演，比武助兴活动。",
+    "content": "",
+    "published_time": "2022-02-15 10:56:00"
+  }
+}
+
+### 修改新闻
+PATCH {{host}}/news
+Content-Type: application/json
+
+{
+  "data": {
+    "id": 2,
+    "contributor": "王小盼",
+    "s_id": 3,
+    "theme": "元宵分享",
+    "outline": "元宵节武术社成员分享团团圆圆照：煮汤圆、看表演，伙伴们来晒出自己的温馨！",
+    "content": "恰逢元宵节，武术社各位成员纷纷晒出了自己家过元宵的“仪式感”。",
+    "published_time": "2022-02-15 10:56:00"
+  }
+}
+
+### 获取新闻
+GET {{host}}/news?id=0
+
+
+### 删除新闻
+DELETE {{host}}/news
+Content-Type: application/json
+
+{
+  "data": 3
+}
+
+
+
+### 添加申请
+POST {{host}}/applications
+Content-Type: application/json
+
+{
+  "data": {
+    "id": null, "type":8, "associated_id":4, "u_id":2, "title":"注销部门", "content":"注销组织部", "file_urls":"", "img_urls":"", "state":0, "submit_time":"2022-02-15 11:34:00", "review_time": "", "review_opinion":""
+  }
+}
+
+
+### 获取申请信息
+GET {{host}}/applications
+
+
+### 审批申请
+PATCH {{host}}/applications
+Content-Type: application/json
+
+{
+  "applicationId": 12,
+  "associatedId": 4,
+  "type": 8,
+  "state": 1,
+  "opinion": "通过"
+}
+
+
+### 结束招新
+PATCH {{host}}/applications/recruit

@@ -6,7 +6,7 @@ const {applicationHelper, societyHelper, departmentHelper} = require('../db/dbhe
 
 // 引入中间件
 const bodyparser = require('koa-bodyparser');
-users.use(bodyparser());
+applications.use(bodyparser());
 
 // 引入model类
 const Response = require('../model/Response');
@@ -20,7 +20,7 @@ applications.post('/', async ctx => {
   console.log(applicationInfo);
   let res = await applicationHelper.addApplication(applicationInfo);
   if(res) ctx.body = new Response('申请成功', CODE.SUCCESS, false);
-  ctx.body = new Response('申请失败', CODE.ERROR, false);
+  else ctx.body = new Response('申请失败', CODE.ERROR, false);
 })
 
 // 获取申请信息
@@ -39,10 +39,11 @@ applications.patch('/', async ctx => {
   let type = ctx.request.body.type;
   let state = ctx.request.body.state;
   let opinion = ctx.request.body.opinion;
-  console.log(aId, type, state, opinion);
+  console.log(apId, asId, type, state, opinion);
 
   let res = await applicationHelper.reviewApplication(apId, state, getLocalDatetime(), opinion);
-  if(res.code === CODE.SUCCESS && state == 1){
+  console.log(res);
+  if(res && state == 1){
     let result;
     switch(type){
       case 1:
@@ -75,12 +76,13 @@ applications.patch('/', async ctx => {
     if(result) ctx.body = new Response('审批成功', CODE.SUCCESS, false);
     else ctx.body = new Response('审批失败：数据库操作失败', CODE.ERROR, false);
   }
+  else if(res) ctx.body = new Response('审批成功', CODE.SUCCESS, false);
   else ctx.body = new Response('审批失败', CODE.ERROR, false);
 })
 
 // 结束招新
 applications.patch('/recruit', async ctx => {
-  let res = await societyHelper.getSocieties(1);
+  let res = await societyHelper.getSocietiesByRecruit(1);
   if(res.code === CODE.SUCCESS){
     let len = res.data.length;
     let cnt = 0;
@@ -93,3 +95,5 @@ applications.patch('/recruit', async ctx => {
   }
   else ctx.body = new Response('获取社团信息失败', CODE.ERROR, false);
 })
+
+module.exports = applications

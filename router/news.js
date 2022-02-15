@@ -38,8 +38,8 @@ news.patch('/', async ctx => {
 news.get('/', async ctx => {
   let sId = ctx.query.id;
   let res;
-  if(id == 0) res = await newsHelper.getAllNews();
-  else res = await newsHelper.getnews(sId);
+  if(sId == 0) res = await newsHelper.getAllNews();
+  else res = await newsHelper.getNews(sId);
   if(res.code === CODE.SUCCESS){
     ctx.body = new Response(res.message, CODE.SUCCESS, true, 'json', res.data);
   }

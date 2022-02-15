@@ -6,7 +6,7 @@ const {candidateHelper, memberHelper} = require('../db/dbhelper');
 
 // 引入中间件
 const bodyparser = require('koa-bodyparser');
-users.use(bodyparser());
+candidates.use(bodyparser());
 
 // 引入model类
 const Response = require('../model/Response');
@@ -23,8 +23,8 @@ candidates.post('/', async ctx => {
   console.log(candidateInfo);
 
   let res = await candidateHelper.addCandidate(candidateInfo);
-  if(res) ctx.body = new Response('添加成功', CODE.SUCCESS, false);
-  else ctx.body = new Response('添加失败', CODE.ERROR, false);
+  if(res) ctx.body = new Response('参加成功', CODE.SUCCESS, false);
+  else ctx.body = new Response('参加失败', CODE.ERROR, false);
 })
 
 // 修改候选人信息：面试分数、面试评价
@@ -63,8 +63,8 @@ candidates.patch('/state', async ctx => {
 
 // 获取候选人信息
 candidates.get('/', async ctx => {
-  let sId = ctx.query.id;
-  let res = await candidateHelper.getCandidates(sId);
+  let rId = ctx.query.id;
+  let res = await candidateHelper.getCandidates(rId);
   if(res.code === CODE.SUCCESS){
     ctx.body = new Response(res.message, CODE.SUCCESS, true, 'json', res.data);
   }
@@ -80,3 +80,5 @@ candidates.delete('/', async ctx => {
   }
   else ctx.body = new Response('删除失败', CODE.ERROR, false);
 }) */
+
+module.exports = candidates

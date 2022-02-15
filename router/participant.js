@@ -50,7 +50,7 @@ participants.get('/', async ctx => {
   let aId = ctx.query.id;
   let res = await participantHelper.getParticipants(aId);
   if(res.code === CODE.SUCCESS){
-    ctx.body = new Response(res.message, CODE.SUCCESS, true, 'json', res.data);
+    ctx.body = new Response(res.message, CODE.SUCCESS, true, 'json', JSON.stringify(res.data));
   }
   else ctx.body = new Response(res.message, CODE.ERROR, false);
 })
@@ -62,9 +62,9 @@ participants.delete('/', async ctx => {
   console.log(uId, aId);
   let res = await participantHelper.delParticipant(uId, aId);
   if(res){
-    ctx.body = new Response('删除成功', CODE.SUCCESS, false);
+    ctx.body = new Response('退出成功', CODE.SUCCESS, false);
   }
-  else ctx.body = new Response('删除失败', CODE.ERROR, false);
+  else ctx.body = new Response('退出失败', CODE.ERROR, false);
 })
 
 // 抽奖
@@ -73,6 +73,7 @@ participants.patch('/lottery', async ctx => {
   let count = ctx.request.body.count;
   let level = ctx.request.body.level;
   let res = await participantHelper.getParticipants(aId);
+  console.log(res);
   if(res.code === CODE.SUCCESS){
     // 抽号码
     let len = res.data.length;
@@ -84,6 +85,8 @@ participants.patch('/lottery', async ctx => {
       draw.push(index);
       list.push(res.data[index]);
     }
+    console.log(draw, list);
+
     // 数据库操作
     let cnt = 0;
     for(let i = 0; i < len; i++){

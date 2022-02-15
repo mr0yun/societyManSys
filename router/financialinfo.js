@@ -46,6 +46,7 @@ financialinfos.get('/', async ctx => {
 
 // 按年获取财务信息
 financialinfos.get('/export', async ctx => {
+  let sId = ctx.query.id;
   let year = ctx.query.year;
   let res = await financialHelper.getFinancialInfosByYear(sId, year);
   if(res.code === CODE.SUCCESS){
